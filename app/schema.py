@@ -1,5 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr
 
 class bookBase(BaseModel):
     book_id:int
@@ -14,7 +14,7 @@ class books(bookBase):
 
 class users(BaseModel):
     name:str
-    email:str
+    email:EmailStr
     password:str
 
 class Login(BaseModel):
@@ -28,4 +28,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None

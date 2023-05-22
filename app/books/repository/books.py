@@ -6,20 +6,20 @@ from fastapi_pagination import Page,add_pagination,paginate
 def read_all(db: Session,sort_by:str=Query(default='book_id',description="field")):#filtering: str=Query(description="field")|None=None)
    
     booksOut=db.query(models.books).all()
-
-    if sort_by=='genre':
-        sorted_books=sorted(booksOut,key=lambda x:x.genre)
-    elif sort_by=='title':
-        sorted_books=sorted(booksOut,key=lambda x:x.title)
-    elif sort_by=='publisher':
-        sorted_books=sorted(booksOut,key=lambda x:x.publisher)
-    elif sort_by=='author':
-        sorted_books=sorted(booksOut,key=lambda x:x.author)
+    if sort_by not in ['book_id','genre','title','author','publisher']:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
-        sorted_books=sorted(booksOut,key=lambda x:x in x.book_id)
-    return (sorted_books)
-
-
+        if sort_by=='genre':
+            sorted_books=sorted(booksOut,key=lambda x:x.genre)
+        elif sort_by=='title':
+            sorted_books=sorted(booksOut,key=lambda x:x.title)
+        elif sort_by=='publisher':
+            sorted_books=sorted(booksOut,key=lambda x:x.publisher)
+        elif sort_by=='author':
+            sorted_books=sorted(booksOut,key=lambda x:x.author)
+        else:
+            sorted_books=sorted(booksOut,key=lambda x:x in x.book_id)
+        return (sorted_books)
 
 
 def create(request: schema.books, db: Session):
