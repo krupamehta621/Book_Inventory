@@ -18,7 +18,7 @@ def read_all(db: Session,sort_by:str=Query(default='book_id',description="field"
         elif sort_by=='author':
             sorted_books=sorted(booksOut,key=lambda x:x.author)
         else:
-            sorted_books=sorted(booksOut,key=lambda x:x in x.book_id)
+            sorted_books=sorted(booksOut,key=lambda x:x.book_id)
         return (sorted_books)
 
 
@@ -32,10 +32,11 @@ def create(request: schema.books, db: Session):
 def delete(book_id: int, db: Session):
     books=db.query(models.books).filter(models.books.book_id==book_id)
     if not books.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,details=f'Book with id {book_id} not found')
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'Book with id {book_id} not found')
 
     books.delete(synchronize_session=False)
     db.commit()
+    db.refresh(books)
     return {"Deleted"}
 
     
@@ -44,10 +45,11 @@ def update_record(book_id: int, request: schema.books, db: Session):
     books=db.query(models.books).filter(models.books.book_id==book_id)
     
     if not books.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,details=f'Book with id {book_id} not found')
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f'Book with id {book_id} not found')
     
     books.update({'genre':request.genre ,'title':request.title ,'author':request.author ,'publisher':request.publisher})
     db.commit()
+    db.refresh(books)
     return "Updated the record"
     
 
@@ -55,5 +57,4 @@ def read(book_id: int, db: Session):
     books=db.query(models.books).filter(models.books.book_id==book_id).first()
     if not books:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"The given book id {book_id} does not exist")
-    
     return books
