@@ -1,5 +1,8 @@
 ## Book_Inventory
-A simple Books Collection using Fast API in Python.
+A simple Books Collection using Fast API in Python.<br/>Creating the colection of books<br/>Retriving the Collection<br/>Updating the book<br/>Deleting a book
+<br/>Auntentication
+<br/>Login
+
 
 ## FastAPI
 Performance
