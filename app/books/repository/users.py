@@ -6,7 +6,7 @@ from ..hashing import Hash
 
 
 def create_user(request :schema.users,db:Session):
-    new_user = models.User(
+    new_user = models.users(
         name=request.name, email=request.email, password=Hash.bcrypt(request.password))
     db.add(new_user)
     db.commit()
